@@ -6,10 +6,10 @@ using UnityEngine.Rendering;
 
 public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
-
     [SerializeField] private GameSettings.Shapes _shape;
     [SerializeField] private GameSettings.Colors _color;
 
+    private Animator anim;
     private Slot fitSlot;
     private bool inSlot = false;
     private Vector3 startingPosition;
@@ -24,6 +24,7 @@ public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     void Start()
     {
         startingPosition = transform.position;
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -54,7 +55,8 @@ public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     {
         if (fitSlot != null && fitSlot.Color == _color && fitSlot.Shape == _shape)
         {
-            //play good audio sound
+            GameManager.Instance.AddNewPiece();
+            anim.SetBool("Placed",true);
             inSlot = true;
             following = false;
             StartCoroutine(GoToPlace(fitSlot.transform.position, GameSettings.GO_IN_SLOT_TIME));
@@ -62,10 +64,8 @@ public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
         else if (following)
         {
             if (fitSlot != null)
-            {
-                //play wrong audio sound
-            }
-                
+                GameManager.Instance.PlaySound("audio_wrong");
+
             following = false;
             StartCoroutine(GoToPlace(startingPosition,GameSettings.GO_BACK_TIME));
         }

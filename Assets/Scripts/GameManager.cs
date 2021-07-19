@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private AudioManager audio;
+    [SerializeField] private AudioManager _audio;
+    [SerializeField] private GameObject _winText;
     private static GameManager sInstance = null;
     private int solvedPieces = 0;
 
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     public void PlaySound(string name)
     {
-        audio.PlaySound(name, .5f);
+        _audio.PlaySound(name, .5f);
     }
 
     private void Awake()
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     private void WinGame()
     {
         PlaySound("success");
+        _winText.SetActive(true);
     }
 
     public void AddNewPiece()

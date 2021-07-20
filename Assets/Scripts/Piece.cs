@@ -53,12 +53,13 @@ public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (fitSlot != null && fitSlot.Color == _color && fitSlot.Shape == _shape)
+        if (fitSlot?.Color == _color && fitSlot?.Shape == _shape)
         {
             GameManager.Instance.AddNewPiece();
             anim.SetBool("Placed",true);
             inSlot = true;
             following = false;
+            StopAllCoroutines();
             StartCoroutine(GoToPlace(fitSlot.transform.position, GameSettings.GO_IN_SLOT_TIME));
         }
         else if (following)
@@ -67,9 +68,9 @@ public class Piece : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
                 GameManager.Instance.PlaySound("audio_wrong");
 
             following = false;
+            StopAllCoroutines();
             StartCoroutine(GoToPlace(startingPosition,GameSettings.GO_BACK_TIME));
         }
-
     }
 
     private IEnumerator GoToPlace(Vector3 target, float time)
